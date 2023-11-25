@@ -77,6 +77,13 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        //* 事件的所有者或參與者才能改
+        // if (Gate::denies('update-event', $event)) {
+        //     abort(403, 'You are not authorized to update this event.');
+        // }
+        //* 換一種更精要的寫法，和上面3行的功能相同
+        $this->authorize('update-event', $event);
+
         // return $event->update( 寫這樣會回傳 boolean 而不是更改後的結果
         $event->update(
             $request->validate([
@@ -96,6 +103,7 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
+
         $event->delete();
         return response(status: 204);
         // return response()->json([
