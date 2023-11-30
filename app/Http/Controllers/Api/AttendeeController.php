@@ -14,6 +14,9 @@ class AttendeeController extends Controller
     {
         //* 除了index, show其他 Event的操作都需要先經驗證
         $this->middleware('auth:sanctum')->except('index', 'show', 'update');
+
+        //* 改用xxPolicy管制權限
+        $this->authorizeResource(Attendee::class, 'attendee');
     }
     /**
      * Display a listing of the resource.
@@ -59,7 +62,8 @@ class AttendeeController extends Controller
     public function destroy(Event $event, Attendee $attendee)
     {
         //* 事件的所有者或參與者才能改
-        $this->authorize('delete-attendee', [$event, $attendee]);
+        //* 改用xxPolicy管制權限，下一行註解
+        // $this->authorize('delete-attendee', [$event, $attendee]);
 
         $attendee->delete();
 

@@ -16,6 +16,8 @@ class EventController extends Controller
     {
         //* 除了index, show其他 Event的操作都需要先經驗證
         $this->middleware('auth:sanctum')->except('index', 'show');
+        //* 改用xxPolicy管制權限
+        $this->authorizeResource(Event::class, 'event');
     }
 
     private array $relations = ['user', 'attendees', 'attendees.user'];
@@ -82,7 +84,8 @@ class EventController extends Controller
         //     abort(403, 'You are not authorized to update this event.');
         // }
         //* 換一種更精要的寫法，和上面3行的功能相同
-        $this->authorize('update-event', $event);
+        //* 下一行註解掉，改中EventPolicy來控制權限
+        // $this->authorize('update-event', $event);
 
         // return $event->update( 寫這樣會回傳 boolean 而不是更改後的結果
         $event->update(
