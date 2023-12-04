@@ -16,6 +16,10 @@ class EventController extends Controller
     {
         //* 除了index, show其他 Event的操作都需要先經驗證
         $this->middleware('auth:sanctum')->except('index', 'show');
+        //* 限1分鐘𡮢試最多60次, 從RouteServiceProvider.php 中的api找到1分鐘60秒的限制
+        $this->middleware('throttle:api')
+            ->only('store', 'destory');
+
         //* 改用xxPolicy管制權限
         $this->authorizeResource(Event::class, 'event');
     }
