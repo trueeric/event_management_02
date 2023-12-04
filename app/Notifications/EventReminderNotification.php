@@ -4,10 +4,11 @@ namespace App\Notifications;
 
 use App\Models\Event;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EventReminderNotification extends Notification
+class EventReminderNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -38,7 +39,7 @@ class EventReminderNotification extends Notification
             ->line('Reminder: You have an upcoming event!')
             ->action('View Event', route('events.show', $this->event->id))
             ->line(
-                "The event {$this->event->name} start at {$this->event->start_time}"
+                "The event {$this->event->name} starts at {$this->event->start_time}"
             );
     }
 
@@ -53,7 +54,6 @@ class EventReminderNotification extends Notification
             'event_id'         => $this->event->id,
             'event_name'       => $this->event->name,
             'event_start_time' => $this->event->start_time,
-
         ];
     }
 }
